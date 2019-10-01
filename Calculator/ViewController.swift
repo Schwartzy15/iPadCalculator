@@ -12,11 +12,13 @@ import UIKit
 
 class ViewController: UIViewController
 {
-    
     var numberOnScreen:Double = 0;
     var previousNumber:Double = 0;
     var operationFlag = false;
     var operation = 0;
+
+    var sum = 0;
+    var enteredNums: [Double] = [];
     
     @IBOutlet weak var label: UILabel!
     
@@ -26,6 +28,7 @@ class ViewController: UIViewController
         {
             label.text = String(sender.tag - 1);
             numberOnScreen = Double(label.text!)!
+            enteredNums.append(numberOnScreen);
             operationFlag = false;
         }
         
@@ -33,12 +36,14 @@ class ViewController: UIViewController
         {
             label.text = label.text! + String(sender.tag - 1);
             numberOnScreen = Double(label.text!)!
+            enteredNums.append(numberOnScreen);
         }
             
         else if(sender.tag == 11)
         {
             label.text = label.text! + String(".");
             numberOnScreen = Double(label.text!)!
+            enteredNums.append(numberOnScreen);
         }
         
 //        else if(sender.tag == 17)
@@ -52,11 +57,13 @@ class ViewController: UIViewController
     {
         if(label.text != "" && sender.tag != 16 && sender.tag != 19)
         {
-            previousNumber = Double(label.text!)!;
+            //previousNumber = Double(label.text!)!;
+            //enteredNums.append(previousNumber);
             
             if(sender.tag == 12) // Addition
             {
                 label.text = "+";
+                //label.text = String(sum);
             }
             else if(sender.tag == 13) // Subtraction
             {
@@ -70,36 +77,45 @@ class ViewController: UIViewController
             {
                 label.text = "÷";
             }
+            else if(sender.tag == 18) // Percentage
+            {
+                //label.text = "%";
+                label.text = String(numberOnScreen / 100);
+                //numberOnScreen = Double(label.text!)!
+            }
             operation = sender.tag;
             operationFlag = true;
         }
             
         else if(sender.tag == 19) // Equals
         {
-            if(operation == 12)
+            if(operation == 12) // Addition
             {
-                label.text = String(previousNumber + numberOnScreen);
+                //label.text = String(previousNumber + numberOnScreen);
+                sum = Int(enteredNums.reduce(0.0, +));
+                label.text = String(sum);
             }
-            else if(operation == 13)
+            else if(operation == 13) // Subtraction
             {
                 label.text = String(previousNumber - numberOnScreen);
             }
-            else if(operation == 14)
+            else if(operation == 14) // Multiplication
             {
                 label.text = String(previousNumber * numberOnScreen);
             }
-            else if(operation == 15)
+            else if(operation == 15) // Division
             {
                 label.text = String(previousNumber / numberOnScreen);
             }
         }
         
-        else if(sender.tag == 16)
+        else if(sender.tag == 16) // Clear
         {
             label.text = "";
             numberOnScreen = 0;
             previousNumber = 0;
             operation = 0;
+            enteredNums.removeAll();
         }
     }
     
